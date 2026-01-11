@@ -1,39 +1,25 @@
 {
   "version": 2,
-  "builds": [
+  "redirects": [
     {
-      "src": "*.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/ray-logistics.html"
+      "source": "/login",
+      "destination": "/auth.html"
     },
     {
-      "src": "/login",
-      "dest": "/auth.html"
+      "source": "/signup",
+      "destination": "/auth.html"
     },
     {
-      "src": "/signup",
-      "dest": "/auth.html"
+      "source": "/track",
+      "destination": "/tracking.html"
     },
     {
-      "src": "/track",
-      "dest": "/tracking.html"
+      "source": "/book",
+      "destination": "/booking.html"
     },
     {
-      "src": "/book",
-      "dest": "/booking.html"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "/dashboard.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
     }
   ],
   "cleanUrls": true,
