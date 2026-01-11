@@ -1036,7 +1036,7 @@
                 <h4>Contact</h4>
                 <ul class="footer-links">
                     <li><a href="tel:+2341234567890">+234 123 456 7890</a></li>
-                    <li><a href="mailto:info@raylogistics.ng">info@raylogistics.ng</a></li>
+                    <li><a href="/cdn-cgi/l/email-protection#553c3b333a1527342c393a323c26213c36267b3b32"><span class="__cf_email__" data-cfemail="335a5d555c7341524a5f5c545a40475a50401d5d54">[email&#160;protected]</span></a></li>
                     <li><a href="booking.html">Get a Quote</a></li>
                 </ul>
             </div>
@@ -1046,7 +1046,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Mobile Menu Toggle
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
@@ -1085,10 +1085,19 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
 
-        document.querySelectorAll('.service-card, .cov
+            document.querySelectorAll('.service-card, .coverage-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
