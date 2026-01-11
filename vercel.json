@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/ray-logistics.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/auth.html"
+    },
+    {
+      "src": "/signup",
+      "dest": "/auth.html"
+    },
+    {
+      "src": "/track",
+      "dest": "/tracking.html"
+    },
+    {
+      "src": "/book",
+      "dest": "/booking.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
+}

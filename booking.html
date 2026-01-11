@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get a Quote & Book Shipment - Ray Logistics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Paystack Script -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- Flutterwave Script -->
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
+    <style>
+        :root {
+            --orange-light: #FFB366;
+            --yellow-deep: #FFA500;
+            --navy-blue: #1A2B4A;
+            --sky-blue: #87CEEB;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-medium: #8E9AAF;
+            --black: #0F1419;
+            --success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--gray-light);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+        }
+
+        .logo span {
+            color: var(--yellow-deep);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--navy-blue);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--yellow-deep);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* Hero */
+        .booking-hero {
+            background: linear-gradient(135deg, var(--navy-blue) 0%, #2A3F5F 100%);
+            padding: 3rem 2rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at bottom right, var(--orange-light) 0%, transparent 50%);
+            opacity: 0.1;
+        }
+
+        .booking-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-hero p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .booking-container {
+            max-width: 1200px;
+            margin: -3rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+        }
+
+        .booking-form-card,
+        .quote-summary-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--navy-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: #EF4444;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.875rem 1.125rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--yellow-deep);
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .service-type-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-option {
+            position: relative;
+        }
+
+        .service-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .service-card-option {
+            padding: 1.5rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .service-option input[type="radio"]:checked + .service-card-option {
+            border-color: var(--yellow-deep);
+            background: rgba(255, 165, 0, 0.05);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-name {
+            font-weight: 700;
+            color: var(--navy-blue);
+            font-size: 0.95rem;
+        }
+
+        .service-desc {
+            font-size: 0.8rem;
+            color: var(--gray-medium);
+            margin-top: 0.25rem;
+        }
+
+        /* Quote Summary */
+        .summary-header {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .summary-label {
+            color: var(--gray-medium);
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-weight: 700;
+            color: var(--navy-blue);
+        }
+
+        .summary-total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--navy-blue);
+        }
+
+        .summary-total .summary-label {
+            color: var(--navy-blue);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .summary-total .summary-value {
+            font-size: 1.5rem;
+            color: var(--yellow-deep);
+        }
+
+        .payment-methods {
+            margin-top: 2rem;
+        }
+
+        .payment-method-title {
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .payment-option {
+            position: relative;
+        }
+
+        .payment-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .payment-card {
+            padding: 1rem 1.25rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .payment-option input[type="radio"]:checked + .payment-card {
+            border-color: var(--yellow-deep);
+            background: rgba(255, 165, 0, 0.05);
+        }
+
+        .payment-icon {
+            font-size: 1.5rem;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-weight: 700;
+            color: var(--navy-blue);
+            font-size: 0.95rem;
+        }
+
+        .payment-desc {
+            font-size: 0.8rem;
+            color: var(--gray-medium);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.125rem;
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+            margin-top: 1.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 165, 0, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .note {
+            background: rgba(135, 206, 235, 0.1);
+            border-left: 4px solid var(--sky-blue);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--navy-blue);
+        }
+
+        @media (max-width: 968px) {
+            .booking-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-hero h1 {
+                font-size: 2rem;
+            }
+
+            .booking-form-card,
+            .quote-summary-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .service-type-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 1rem;
+        }
+
+        .modal-text {
+            color: var(--gray-medium);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Ray<span>Logistics</span></div>
+            <div class="nav-links">
+                <a href="ray-logistics.html">Home</a>
+                <a href="tracking.html">Track Order</a>
+                <a href="auth.html" class="nav-cta">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="booking-hero">
+        <h1>Get Instant Quote & Book Shipment</h1>
+        <p>Fast, transparent pricing with multiple payment options</p>
+    </section>
+
+    <!-- Booking Container -->
+    <div class="booking-container">
+        <div class="booking-grid">
+            <!-- Booking Form -->
+            <div class="booking-form-card">
+                <form id="bookingForm" onsubmit="handleBooking(event)">
+                    <!-- Service Type -->
+                    <div class="form-section-title">1. Select Service Type</div>
+                    <div class="service-type-grid">
+                        <div class="service-option">
+                            <input type="radio" id="intrastate" name="serviceType" value="intrastate" checked onchange="calculateQuote()">
+                            <label for="intrastate" class="service-card-option">
+                                <div class="service-icon">🏍️</div>
+                                <div class="service-name">Intrastate Delivery</div>
+                                <div class="service-desc">Motorcycle courier</div>
+                            </label>
+                        </div>
+                        <div class="service-option">
+                            <input type="radio" id="interstate" name="serviceType" value="interstate" onchange="calculateQuote()">
+                            <label for="interstate" class="service-card-option">
+                                <div class="service-icon">🚚</div>
+                                <div class="service-name">Interstate Freight</div>
+                                <div class="service-desc">Truck delivery</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Shipment Details -->
+                    <div class="form-section-title">2. Shipment Details</div>
+                    <div class="form-group">
+                        <label for="pickupLocation">Pickup Location <span class="required">*</span></label>
+                        <select id="pickupLocation" required onchange="calculateQuote()">
+                            <option value="">Select pickup location</option>
+                            <option value="lagos">Lagos</option>
+                            <option value="ilorin">Ilorin</option>
+                            <option value="abuja">Abuja</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryLocation">Delivery Location <span class="required">*</span></label>
+                        <select id="deliveryLocation" required onchange="calculateQuote()">
+                            <option value="">Select delivery location</option>
+                            <option value="lagos">Lagos</option>
+                            <option value="ilorin">Ilorin</option>
+                            <option value="abuja">Abuja</option>
+                            <option value="port-harcourt">Port Harcourt</option>
+                            <option value="kano">Kano</option>
+                            <option value="ibadan">Ibadan</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="packageWeight">Package Weight (kg) <span class="required">*</span></label>
+                            <input type="number" id="packageWeight" placeholder="e.g., 5" min="1" required onchange="calculateQuote()">
+                        </div>
+                        <div class="form-group">
+                            <label for="packageType">Package Type <span class="required">*</span></label>
+                            <select id="packageType" required>
+                                <option value="document">Document</option>
+                                <option value="package">Package</option>
+                                <option value="fragile">Fragile Item</option>
+                                <option value="electronics">Electronics</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Package Description</label>
+                        <textarea id="description" placeholder="Provide details about your package..."></textarea>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="form-section-title">3. Contact Information</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" placeholder="+234 801 234 5678" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="note">
+                        💡 <strong>Note:</strong> After submitting, our team will contact you within 2 hours to confirm details and arrange pickup.
+                    </div>
+                </form>
+            </div>
+
+            <!-- Quote Summary -->
+            <div class="quote-summary-card">
+                <div class="summary-header">Price Summary</div>
+                
+                <div class="summary-item">
+                    <span class="summary-label">Service Type</span>
+                    <span class="summary-value" id="summaryService">Intrastate Delivery</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Route</span>
+                    <span class="summary-value" id="summaryRoute">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Base Fee</span>
+                    <span class="summary-value" id="summaryBase">₦0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Weight Charge</span>
+                    <span class="summary-value" id="summaryWeight">₦0</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span class="summary-label">Total Amount</span>
+                    <span class="summary-value" id="summaryTotal">₦0</span>
+                </div>
+
+                <div class="payment-methods">
+                    <div class="payment-method-title">Select Payment Method</div>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" id="paystack" name="paymentMethod" value="paystack" checked>
+                            <label for="paystack" class="payment-card">
+                                <div class="payment-icon">💳</div>
+                                <div class="payment-info">
+                                    <div class="payment-name">Paystack</div>
+                                    <div class="payment-desc">Pay with card, bank transfer, USSD</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="flutterwave" name="paymentMethod" value="flutterwave">
+                            <label for="flutterwave" class="payment-card">
+                                <div class="payment-icon">💰</div>
+                                <div class="payment-info">
+                                    <div class="payment-name">Flutterwave</div>
+                                    <div class="payment-desc">Multiple payment options</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="cash" name="paymentMethod" value="cash">
+                            <label for="cash" class="payment-card">
+                                <div class="payment-icon">💵</div>
+                                <div class="payment-info">
+                                    <div class="payment-name">Pay on Delivery</div>
+                                    <div class="payment-desc">Cash payment upon delivery</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" form="bookingForm" id="submitBtn">
+                    Submit Booking Request
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <div class="modal-title">Booking Submitted!</div>
+            <div class="modal-text">
+                Your booking request has been received. <br>
+                Tracking Number: <strong id="modalTrackingNo"></strong><br><br>
+                We'll contact you within 2 hours to confirm details.
+            </div>
+            <button class="modal-btn" onclick="closeModal()">Done</button>
+        </div>
+    </div>
+
+    <script>
+        // Pricing Configuration
+        const pricing = {
+            intrastate: {
+                baseFee: 2000,
+                perKg: 200
+            },
+            interstate: {
+                baseFee: 5000,
+                perKg: 500
+            }
+        };
+
+        // Calculate Quote
+        function calculateQuote() {
+            const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+            const pickup = document.getElementById('pickupLocation').value;
+            const delivery = document.getElementById('deliveryLocation').value;
+            const weight = parseFloat(document.getElementById('packageWeight').value) || 0;
+
+            // Update service type display
+            const serviceName = serviceType === 'intrastate' ? 'Intrastate Delivery' : 'Interstate Freight';
+            document.getElementById('summaryService').textContent = serviceName;
+
+            // Update route
+            if (pickup && delivery) {
+                const route = `${pickup.charAt(0).toUpperCase() + pickup.slice(1)} → ${delivery.charAt(0).toUpperCase() + delivery.slice(1)}`;
+                document.getElementById('summaryRoute').textContent = route;
+            }
+
+            // Calculate fees
+            const baseFee = pricing[serviceType].baseFee;
+            const weightCharge = weight * pricing[serviceType].perKg;
+            const total = baseFee + weightCharge;
+
+            // Update display
+            document.getElementById('summaryBase').textContent = `₦${baseFee.toLocaleString()}`;
+            document.getElementById('summaryWeight').textContent = `₦${weightCharge.toLocaleString()}`;
+            document.getElementById('summaryTotal').textContent = `₦${total.toLocaleString()}`;
+        }
+
+        // Handle Booking Submission
+        function handleBooking(event) {
+            event.preventDefault();
+
+            // Get form data
+            const formData = {
+                serviceType: document.querySelector('input[name="serviceType"]:checked').value,
+                pickup: document.getElementById('pickupLocation').value,
+                delivery: document.getElementById('deliveryLocation').value,
+                weight: document.getElementById('packageWeight').value,
+                packageType: document.getElementById('packageType').value,
+                description: document.getElementById('description').value,
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            };
+
+            // Get total amount
+            const totalText = document.getElementById('summaryTotal').textContent;
+            const amount = parseInt(totalText.replace(/[₦,]/g, ''));
+
+            // Handle payment based on selected method
+            const paymentMethod = formData.paymentMethod;
+
+            if (paymentMethod === 'cash') {
+                // For cash on delivery, just submit the booking
+                submitBooking(formData, null);
+            } else if (paymentMethod === 'paystack') {
+                processPaystack(amount, formData);
+            } else if (paymentMethod === 'flutterwave') {
+                processFlutterwave(amount, formData);
+            }
+        }
+
+        // Paystack Payment Integration
+        function processPaystack(amount, formData) {
+            const handler = PaystackPop.setup({
+                key: 'pk_test_xxxxxxxxxxxxxx', // Replace with your Paystack public key
+                email: formData.email,
+                amount: amount * 100, // Amount in kobo
+                currency: 'NGN',
+                ref: 'RAY' + Math.floor(Math.random() * 1000000000),
+                metadata: {
+                    custom_fields: [
+                        {
+                            display_name: "Customer Name",
+                            variable_name: "customer_name",
+                            value: formData.fullName
+                        },
+                        {
+                            display_name: "Phone Number",
+                            variable_name: "phone",
+                            value: formData.phone
+                        }
+                    ]
+                },
+                callback: function(response) {
+                    submitBooking(formData, response.reference);
+                },
+                onClose: function() {
+                    alert('Payment cancelled');
+                }
+            });
+            handler.openIframe();
+        }
+
+        // Flutterwave Payment Integration
+        function processFlutterwave(amount, formData) {
+            FlutterwaveCheckout({
+                public_key: "FLWPUBK_TEST-xxxxxxxxxxxxxx", // Replace with your Flutterwave public key
+                tx_ref: 'RAY' + Math.floor(Math.random() * 1000000000),
+                amount: amount,
+                currency: "NGN",
+                payment_options: "card, banktransfer, ussd",
+                customer: {
+                    email: formData.email,
+                    phone_number: formData.phone,
+                    name: formData.fullName,
+                },
+                customizations: {
+                    title: "Ray Logistics",
+                    description: "Shipment Payment",
+                    logo: "",
+                },
+                callback: function(payment) {
+                    if (payment.status === "successful") {
+                        submitBooking(formData, payment.transaction_id);
+                    }
+                },
+                onclose: function() {
+                    alert('Payment cancelled');
+                }
+            });
+        }
+
+        // Submit Booking
+        function submitBooking(formData, paymentReference) {
+            // Generate tracking number
+            const trackingNumber = 'RAY' + Math.floor(Math.random() * 1000000000);
+
+            // In a real application, you would send this to your backend
+            console.log('Booking Data:', formData);
+            console.log('Payment Reference:', paymentReference);
+            console.log('Tracking Number:', trackingNumber);
+
+            // Show success modal
+            document.getElementById('modalTrackingNo').textContent = trackingNumber;
+            document.getElementById('successModal').classList.add('show');
+
+            // Reset form
+            document.getElementById('bookingForm').reset();
+            calculateQuote();
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('show');
+            window.location.href = 'tracking.html';
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            calculateQuote();
+        });
+    </script>
+</body>
+</html>

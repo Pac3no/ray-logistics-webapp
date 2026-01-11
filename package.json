@@ -1,0 +1,20 @@
+{
+  "name": "ray-logistics-webapp",
+  "version": "1.0.0",
+  "description": "Ray Logistics - Interstate and Intrastate Delivery Services in Nigeria",
+  "main": "ray-logistics.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "logistics",
+    "delivery",
+    "nigeria",
+    "freight",
+    "shipping",
+    "tracking"
+  ],
+  "author": "Ray Logistics",
+  "license": "MIT"
+}

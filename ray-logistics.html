@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ray Logistics - Swift Interstate & Intrastate Delivery Across Nigeria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange-light: #FFB366;
+            --yellow-deep: #FFA500;
+            --navy-blue: #1A2B4A;
+            --sky-blue: #87CEEB;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-medium: #8E9AAF;
+            --black: #0F1419;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--black);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(26, 43, 74, 0.1);
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--yellow-deep);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--navy-blue);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:not(.nav-cta)::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--yellow-deep);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.nav-cta):hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:not(.nav-cta):hover {
+            color: var(--yellow-deep);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .nav-cta.secondary {
+            background: transparent;
+            border: 2px solid var(--navy-blue);
+            color: var(--navy-blue);
+        }
+
+        .nav-cta.secondary:hover {
+            background: var(--navy-blue);
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--navy-blue);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            min-height: 90vh;
+            background: linear-gradient(135deg, var(--navy-blue) 0%, #2A3F5F 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background: radial-gradient(circle at top right, var(--sky-blue) 0%, transparent 70%);
+            opacity: 0.1;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, var(--yellow-deep) 35px, var(--yellow-deep) 70px);
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 179, 102, 0.2);
+            color: var(--orange-light);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 179, 102, 0.3);
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            max-width: 550px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 165, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 165, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-image-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .card-1 {
+            top: 10%;
+            right: 5%;
+            width: 200px;
+            animation-delay: 0s;
+        }
+
+        .card-2 {
+            bottom: 15%;
+            left: 0;
+            width: 220px;
+            animation-delay: 1s;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            color: var(--gray-medium);
+            font-size: 0.9rem;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 6rem 2rem;
+            background: var(--gray-light);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--sky-blue);
+            color: var(--navy-blue);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray-medium);
+            line-height: 1.7;
+        }
+
+        .services-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--yellow-deep), var(--orange-light));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(26, 43, 74, 0.15);
+            border-color: var(--sky-blue);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--navy-blue), #2A3F5F);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .service-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy-blue);
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: var(--gray-medium);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .service-features li {
+            padding: 0.5rem 0;
+            color: var(--navy-blue);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 165, 0, 0.1);
+            color: var(--yellow-deep);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Coverage Section */
+        .coverage {
+            padding: 6rem 2rem;
+            background: var(--navy-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coverage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at bottom left, var(--sky-blue) 0%, transparent 50%);
+            opacity: 0.05;
+        }
+
+        .coverage-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .coverage-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .coverage-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .coverage-header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .coverage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .coverage-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .coverage-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .coverage-type {
+            font-size: 0.85rem;
+            color: var(--orange-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .coverage-item h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .coverage-locations {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--yellow-deep), var(--orange-light));
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 2rem;
+            background: var(--gray-light);
+        }
+
+        .cta-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--navy-blue) 0%, #2A3F5F 100%);
+            border-radius: 30px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--sky-blue) 0%, transparent 70%);
+            opacity: 0.1;
+        }
+
+        .cta-container h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy-blue);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand span {
+            color: var(--yellow-deep);
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--orange-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                right: -100%;
+                width: 100%;
+                max-width: 400px;
+                height: calc(100vh - 80px);
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s ease;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.75rem 1rem;
+                text-align: center;
+            }
+
+            .nav-links .nav-cta {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-visual {
+                height: 400px;
+            }
+
+            .hero-image-container {
+                height: 400px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .cta-container {
+                padding: 3rem 2rem;
+            }
+
+            .cta-container h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .coverage-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Ray<span>Logistics</span></div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#coverage">Coverage</a></li>
+                <li><a href="tracking.html" class="nav-cta secondary">Track Order</a></li>
+                <li><a href="booking.html" class="nav-cta">Book Shipment</a></li>
+                <li><a href="auth.html" class="nav-cta">Login</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-pattern"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">🚀 Nigeria's Trusted Logistics Partner</div>
+                <h1>Fast, Reliable <span class="highlight">Logistics Solutions</span> Across Nigeria</h1>
+                <p>Experience seamless interstate and intrastate delivery services with Ray Logistics. From swift motorcycle couriers to heavy-duty haulage, we move your goods safely and on time.</p>
+                <div class="hero-buttons">
+                    <a href="booking.html" class="btn-primary">Request a Quote</a>
+                    <a href="tracking.html" class="btn-secondary">Track Shipment</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-container">
+                    <div class="floating-card card-1">
+                        <div class="card-icon">🏍️</div>
+                        <div class="card-title">Express Delivery</div>
+                        <div class="card-subtitle">Same-day intrastate service</div>
+                    </div>
+                    <div class="floating-card card-2">
+                        <div class="card-icon">🚚</div>
+                        <div class="card-title">Interstate Freight</div>
+                        <div class="card-subtitle">Nationwide coverage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <div class="section-badge">What We Offer</div>
+            <h2>Comprehensive Logistics Services</h2>
+            <p>Whether you need quick local delivery or long-distance freight, we have the right solution for your business</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏍️</div>
+                <h3>Intrastate Motorcycle Delivery</h3>
+                <p>Lightning-fast courier services within Lagos, Ilorin, and Abuja using our fleet of professional motorcycle riders.</p>
+                <ul class="service-features">
+                    <li>Same-day delivery</li>
+                    <li>Real-time tracking</li>
+                    <li>Document & package delivery</li>
+                    <li>Affordable rates</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🚚</div>
+                <h3>Interstate Truck Services</h3>
+                <p>Reliable freight transportation connecting all major cities across Nigeria with our modern truck fleet.</p>
+                <ul class="service-features">
+                    <li>Nationwide coverage</li>
+                    <li>Scheduled routes</li>
+                    <li>Cargo insurance</li>
+                    <li>Bulk shipments</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📦</div>
+                <h3>Heavy Haulage & Freight</h3>
+                <p>Specialized equipment and expertise for oversized cargo, industrial equipment, and heavy machinery transport.</p>
+                <ul class="service-features">
+                    <li>Specialized equipment</li>
+                    <li>Professional handling</li>
+                    <li>Route planning</li>
+                    <li>Safety certified</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coverage Section -->
+    <section class="coverage" id="coverage">
+        <div class="coverage-container">
+            <div class="coverage-header">
+                <h2>Where We Operate</h2>
+                <p>Comprehensive coverage across Nigeria's major cities and interstate routes</p>
+            </div>
+            <div class="coverage-grid">
+                <div class="coverage-item">
+                    <div class="coverage-type">Intrastate - Motorcycle</div>
+                    <h3>Lagos</h3>
+                    <p class="coverage-locations">All local government areas including Mainland, Island, Lekki, Ajah, Ikeja, Victoria Island, and surrounding areas</p>
+                </div>
+                <div class="coverage-item">
+                    <div class="coverage-type">Intrastate - Motorcycle</div>
+                    <h3>Ilorin</h3>
+                    <p class="coverage-locations">Complete coverage of Ilorin metropolis and environs with fast same-day delivery</p>
+                </div>
+                <div class="coverage-item">
+                    <div class="coverage-type">Intrastate - Motorcycle</div>
+                    <h3>Abuja</h3>
+                    <p class="coverage-locations">Federal Capital Territory including Maitama, Garki, Wuse, Asokoro, and satellite towns</p>
+                </div>
+                <div class="coverage-item">
+                    <div class="coverage-type">Interstate - Trucks</div>
+                    <h3>Nationwide</h3>
+                    <p class="coverage-locations">Connecting all 36 states with reliable freight services, scheduled routes, and flexible delivery options</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Deliveries Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Happy Clients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">36</div>
+                <div class="stat-label">States Covered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Customer Support</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Ready to Ship with Ray Logistics?</h2>
+            <p>Get instant quotes, track your shipments in real-time, and experience hassle-free logistics</p>
+            <div class="cta-buttons">
+                <a href="booking.html" class="btn-primary">Get Started Today</a>
+                <a href="tel:+2341234567890" class="btn-secondary">Call Us Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Ray<span>Logistics</span></h3>
+                <p>Your trusted partner for fast, reliable, and affordable logistics services across Nigeria. Moving your business forward, one delivery at a time.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#coverage">Coverage</a></li>
+                    <li><a href="auth.html">Login / Sign Up</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Services</h4>
+                <ul class="footer-links">
+                    <li><a href="booking.html">Motorcycle Delivery</a></li>
+                    <li><a href="booking.html">Interstate Freight</a></li>
+                    <li><a href="booking.html">Heavy Haulage</a></li>
+                    <li><a href="tracking.html">Track Shipment</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:+2341234567890">+234 123 456 7890</a></li>
+                    <li><a href="mailto:info@raylogistics.ng">info@raylogistics.ng</a></li>
+                    <li><a href="booking.html">Get a Quote</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Ray Logistics. All rights reserved. | Built for speed, reliability, and trust.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll-based animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .cov
